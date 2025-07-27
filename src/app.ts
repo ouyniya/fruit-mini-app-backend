@@ -6,7 +6,6 @@ import { setupSecurity } from "./middleware/security";
 import { apiLimiter } from "./middleware/rateLimiter";
 import authRoutes from "./routes/auth.routes";
 import fruitRoutes from "./routes/fruit.routes";
-import cors from "cors";
 
 const app = express();
 
