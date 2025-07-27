@@ -77,7 +77,7 @@ export class FruitController {
   /**
    * @method addFruit
    * @description Added a fruit inventory record by ID.
-   * @route POST /fruit/:id
+   * @route POST /fruit
    * @access Private
    * @param {object} req.body - The added fruit data
    * @returns {object} The added fruit record
@@ -111,7 +111,7 @@ export class FruitController {
 
   /**
    * @method updateFruit
-   * @description Added a fruit inventory record by ID.
+   * @description Updates a fruit inventory record by ID.
    * @route PUT /fruit/:id
    * @access Private
    * @param {string} req.params.id - The ID of the fruit to update
@@ -121,6 +121,17 @@ export class FruitController {
     try {
       const { id } = req.params;
       const { inventoryDate, productName, color, amount, unit } = req.body;
+
+      const existingFruit = await prisma.fruitsInventory.findUnique({
+        where: { id: Number(id) },
+      });
+
+      if (!existingFruit) {
+        return res.status(404).json({
+          success: false,
+          message: "Fruit not found",
+        });
+      }
 
       const updated = await prisma.fruitsInventory.update({
         where: { id: Number(id) },
@@ -149,6 +160,7 @@ export class FruitController {
   /**
    * @method deleteFruit
    * @description Deletes a fruit inventory record by its ID.
+   * @route DELETE /fruit/:id
    * Route Parameter:
    * - id: ID of the fruit inventory to delete
    */

@@ -27,14 +27,6 @@ export class JWTService {
     return crypto.randomBytes(64).toString("hex");
   }
 
-  // Generate Password Reset Token
-  static generateResetToken(userId: number): string {
-    return jwt.sign({ userId }, this.resetSecret, {
-      expiresIn: process.env.JWT_RESET_EXPIRE || "1h",
-      issuer: "fruit-inventory",
-    } as jwt.SignOptions);
-  }
-
   // Verify Access Token
   static verifyAccessToken(token: string): JWTPayload {
     try {
@@ -44,17 +36,6 @@ export class JWTService {
       }) as JWTPayload;
     } catch (error) {
       throw new Error("Invalid or expired access token");
-    }
-  }
-
-  // Verify Reset Token
-  static verifyResetToken(token: string): { userId: number } {
-    try {
-      return jwt.verify(token, this.resetSecret, {
-        issuer: "fruit-inventory",
-      }) as { userId: number };
-    } catch (error) {
-      throw new Error("Invalid or expired reset token");
     }
   }
 
