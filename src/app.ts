@@ -6,10 +6,11 @@ import { setupSecurity } from "./middleware/security";
 import { apiLimiter } from "./middleware/rateLimiter";
 import authRoutes from "./routes/auth.routes";
 import fruitRoutes from "./routes/fruit.routes";
+import cors from "cors";
 
 const app = express();
 
-app.set('trust proxy', 1); // trust first proxy only
+app.set("trust proxy", 1); // trust first proxy only
 
 // Apply CORS configuration using the custom setupSecurity middleware.
 setupSecurity(app);
@@ -26,6 +27,7 @@ app.use("/api/fruit", fruitRoutes);
 // --- Global Error Handling Middleware ---
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error("Global Error Handler:", err.stack);
+  console.error("Error middleware:", err);
 
   res.status(500).json({
     success: false,

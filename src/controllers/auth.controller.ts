@@ -210,13 +210,11 @@ export class AuthController {
       logData.reason = "Successful login";
       await prisma.loginLog.create({ data: logData });
 
-      // Set secure HTTP-only cookie for refresh token
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        // secure: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        secure: true, // must be true with sameSite: 'none'
+        sameSite: "none", // allow cross-site cookies
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
       res.json({
