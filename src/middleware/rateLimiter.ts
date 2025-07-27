@@ -12,6 +12,10 @@ export const apiLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: (req) => {
+    const ip = req.ip || req.headers["x-forwarded-for"] || "unknown";
+    return Array.isArray(ip) ? ip[0] : ip;
+  },
 });
 
 // Strict Rate Limiter for Auth endpoints
@@ -24,9 +28,8 @@ export const authLimiter = rateLimit({
     message: "Too many authentication attempts, please try again later",
   },
   keyGenerator: (req) => {
-    // Use email or username as key instead of IP
-    const identifier = req.body.email || req.body.username;
-    return identifier || req.ip; // fallback to IP if body is missing
+    const ip = req.ip || req.headers["x-forwarded-for"] || "unknown";
+    return Array.isArray(ip) ? ip[0] : ip;
   },
 });
 
