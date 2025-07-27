@@ -9,6 +9,8 @@ import fruitRoutes from "./routes/fruit.routes";
 
 const app = express();
 
+app.set('trust proxy', 1); // trust first proxy only
+
 // Apply CORS configuration using the custom setupSecurity middleware.
 setupSecurity(app);
 
