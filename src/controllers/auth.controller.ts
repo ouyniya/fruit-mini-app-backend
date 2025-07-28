@@ -327,7 +327,12 @@ export class AuthController {
       }
 
       // Clear cookie
-      res.clearCookie("refreshToken");
+      res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        path: "/", // default 
+      });
 
       res.json({
         success: true,
